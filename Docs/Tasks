@@ -1,0 +1,13 @@
+Tasks:
+- Mic input to capture audio from user
+- speech to text to convert audio to words
+- intent detection to interpret meaning from words (i.e. start a 5 minute timer)
+- voice reply to speak back after router executes action (i.e. "it's 42 degrees outside")
+- layout zone for screen area reserved for one type of info (i.e. zone for time, weather, calendar, timer, etc) ONLY DISPLAY 
+- Full screen mirror display
+- weather API to fetch temperature, condition, high/low
+- calendar data
+- timer backend to start time, for duration, and remaining time (will be displayed by UI)
+- state manager (mirror's current knowledge), maintain current weather, active timer, calendar events, and music playing
+- media playback for music start/stop and video start/stop
+- router for shared integration

@@ -1,330 +1,64 @@
-Perfect. Let’s turn this into a clear 24-hour execution plan your team can actually follow.
-
-We’re building:
-
-🪞 AI Life Dashboard Mirror (Voice-First MVP)
-🎯 MVP Features
-
-Fullscreen dashboard UI
-
-Digital clock
-
-Weather
-
-Calendar (basic)
-
-Voice commands
-
-Timer
-
-Text-to-speech responses
-
-No face detection. No wake word (unless extra time).
-
-🏗 HIGH-LEVEL ARCHITECTURE
-Microphone
-   ↓
-Speech-to-Text
-   ↓
-Intent Parser
-   ↓
-Command Router
-   ↓
-State Manager
-   ↓
-Frontend Dashboard
-   ↑
-Text-to-Speech
-
-Frontend and backend can run on same machine.
-
-👥 TEAM ROLE BREAKDOWN
-👤 Person 1 — Frontend Dashboard
-👤 Person 2 — Voice + Speech Recognition
-👤 Person 3 — Backend + APIs
-👤 Person 4 — AI + TTS + Integration
-
-Everyone works in parallel.
-
-⏳ 24-HOUR EXECUTION PLAN
-🔵 PHASE 1 (Hour 0–2): Setup + Foundation
-1️⃣ Decide Stack
-
-Recommended stack:
-
-Frontend: React (Vite or Next)
-
-Backend: FastAPI (Python)
-
-Speech-to-text: Whisper API or local faster-whisper
-
-Text-to-speech: pyttsx3 (local) or OpenAI TTS
-
-Weather: OpenWeather API
-
-Calendar: Google Calendar OR mock data
-
-2️⃣ Repo Setup
-
-Create GitHub repo
-
-Create branches:
-
-frontend-ui
-
-voice-system
-
-backend-api
-
-ai-logic
-
-🔵 PHASE 2 (Hour 2–6): Build Static Dashboard
-👤 Frontend Dev
-Build:
-
-Fullscreen black background
-
-Large digital clock (top center)
-
-Weather section (top left)
-
-Calendar section (right side)
-
-Timer section (bottom)
-
-Make it look futuristic:
-
-Thin white font
-
-Minimal UI
-
-Smooth fade transitions
-
-This alone makes demo impressive.
-
-🔵 PHASE 3 (Hour 4–8): Weather Integration
-👤 Backend Dev
-
-Create /weather endpoint
-
-Fetch weather from API
-
-Return:
-
-Temperature
-
-Condition
-
-High/Low
-
-Frontend polls every 10–15 minutes.
-
-This is an early “win.”
-
-🔵 PHASE 4 (Hour 6–10): Calendar
-Option A (Safe MVP)
-
-Hardcode demo events:
-
-[
-  {"time": "10:00 AM", "event": "Team Standup"},
-  {"time": "2:00 PM", "event": "Hackathon Judging"},
-  {"time": "5:00 PM", "event": "Workout"}
-]
-Option B (Advanced)
-
-Use Google Calendar API.
-
-Only do this if someone is confident with OAuth.
-
-Display:
-
-Today’s date
-
-Next 3 events
-
-🔵 PHASE 5 (Hour 8–14): Voice System
-
-This is your differentiator.
-
-👤 Voice Dev
-Step 1 — Capture Audio
-
-Use browser mic OR Python mic capture
-
-Step 2 — Speech to Text
-
-Send audio to:
-
-Whisper API
-
-Return text string.
-
-👤 Backend Dev
-Step 3 — Intent Parser
-
-Simple keyword matching:
-
-if "weather" in text:
-    intent = "weather"
-elif "schedule" in text or "calendar" in text:
-    intent = "calendar"
-elif "timer" in text:
-    intent = "timer"
-elif "time" in text:
-    intent = "clock"
-
-Don’t overcomplicate.
-
-🔵 PHASE 6 (Hour 12–16): Timer System
-
-Timer commands:
-
-“Start a 5 minute timer”
-
-“Set timer for 10 minutes”
-
-Extract number from string.
-
-Start countdown in backend.
-Send state to frontend.
-Display countdown visually.
-
-Add:
-
-Flash animation when done
-
-Audio notification
-
-Judges love visual feedback.
-
-🔵 PHASE 7 (Hour 14–18): Text-to-Speech
-👤 AI / TTS Dev
-
-After command runs, respond verbally:
-
-Examples:
-
-Weather:
-
-“It’s 42 degrees and cloudy in Pullman.”
-
-Calendar:
-
-“You have three events today. Your next event is Team Standup at 10 AM.”
-
-Timer:
-
-“Starting a five minute timer.”
-
-Clock:
-
-“It is 9:42 PM.”
-
-This makes it feel alive.
-
-🔵 PHASE 8 (Hour 18–22): Polish + Integration
-
-Now combine everything.
-
-Test flow:
-
-Speak command
-
-Transcript appears
-
-Dashboard updates
-
-Mirror speaks response
-
-Fix:
-
-Latency issues
-
-UI flicker
-
-Error handling
-
-Add subtle animations.
-
-🔵 PHASE 9 (Hour 22–24): Demo Prep
-
-Polish > Features.
-
-Script demo:
-
-“Mirror, what’s the weather?”
-
-“Mirror, what’s on my schedule?”
-
-“Start a two minute timer.”
-
-Show timer countdown
-
-Let it ring
-
-🧠 Clean Command List (Keep It Small)
-
-Support only:
-
-What time is it?
-
-What’s the weather?
-
-What’s on my schedule?
-
-Start a ___ minute timer.
-
-That’s it.
-
-🏆 What Makes This Win
-
-You must frame it properly:
-
-Say:
-
-“We reinvented the mirror by turning it into a voice-first AI dashboard that replaces your phone during your morning routine.”
-
-NOT:
-
-“We made a smart mirror.”
-
-🚨 Risk Management
-
-If voice is buggy:
-
-Add clickable buttons as backup.
-
-Never rely 100% on speech for demo.
-
-📦 Final Deliverable Checklist
-
-Before submission:
-
- Clock working
-
- Weather auto updates
-
- Calendar visible
-
- Voice command recognized
-
- Timer works
-
- Text-to-speech works
-
- Clean UI
-
- Demo rehearsed
-
-If you want next, I can:
-
-Give you a folder structure layout
-
-Write example intent parsing code
-
-Help you design the UI layout
-
-Help you build a realistic 3-minute pitch
-
-Help you design stretch goals if you finish early
+smart_mirror/
+├── main.py                 # Central router / main loop
+├── requirements.txt        # Libraries for all team members
+├── .env                    # API keys and secrets
+├── modules/
+│   ├── gui/
+│   │   ├── layout.py       # Layout zones (Rory)
+│   │   ├── render.py       # Rendering modules (Rory)
+│   │   └── display.py      # Fullscreen mirror display (Rory)
+│   ├── state/
+│   │   └── state_manager.py # State manager (Rory)
+│   ├── timer/
+│   │   └── timer_backend.py # Timer backend (Rorik)
+│   ├── calendar/
+│   │   └── calendar_data.py # Calendar data (Rorik)
+│   ├── media/
+│   │   └── media_playback.py # Music/video playback (Rorik)
+│   ├── voice/
+│   │   ├── elevenlabs.py    # Voice reply / ElevenLabs (Justin)
+│   │   └── router.py        # Intent router / integration (Justin)
+│   └── audio/
+│       ├── mic_input.py     # Mic capture (Estefania)
+│       ├── speech_to_text.py # Convert audio to text (Estefania)
+│       └── weather.py       # Weather API (Estefania)
+
+Rory (GUI work and state):
+- Layout zones, rendering modules, fullscreen display
+- Manages state_manager.py for current weather, timer, calendar, music
+- Reads state from backend modules and displays it
+
+Rorik (Backend logic):
+- Timer backend, calendar data, media playback
+- Updates state that Rory’s GUI reads
+- Media playback may be triggered by router (Justin)
+
+Justin (Voice integration):
+- Handles ElevenLabs responses, converts router commands to voice
+- Runs router that connects voice input, GUI updates, timers, media playback
+
+Estefania (Input and APIs):
+- Captures mic input
+- Converts speech → text
+- Fetches weather data (can mock for MVP)
+- Provides parsed info to router → state → GUI
+
+Rory (GUI work and state):
+- layout.py: Define screen zones for time, weather, calendar, timer.
+- render.py: Draw each module’s content on the screen.
+- display.py: OpenCV fullscreen display.
+- state_manager.py: Store current values for weather, timer, calendar, music.
+
+Rorik (Backend logic):
+- timer_backend.py: Start/stop timers, track remaining time.
+- calendar_data.py: Provide events (MVP can be hardcoded).
+- media_playback.py: Play/stop music and videos.
+
+Justin (Voice integration):
+- elevenlabs.py: Speak responses from the system.
+- router.py: Receive intents → call the appropriate backend module → update state.
+
+Estefania (Input and APIs):
+- mic_input.py: Record audio from user.
+- speech_to_text.py: Convert audio → text.
+- weather.py: Fetch weather data from API (or mock for MVP).

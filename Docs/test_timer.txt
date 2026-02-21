@@ -1,0 +1,11 @@
+import time
+from timer import Timer
+
+timer = Timer()
+timer.start(10)
+
+while timer.is_active():
+    print(timer.get_remaining_time())
+    time.sleep(1)
+
+print("Timer finished!")

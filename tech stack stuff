@@ -1,0 +1,11 @@
+Requirements:
+opencv-python
+pyaudio
+elevenlabs
+requests
+python-dotenv
+
+put these in a requirements.txt and everyone should run pip install -r requirements.txt
+and then we need a virtual environment venv and just update requirements.txt whenever a new library is added.
+
+pip freeze > requirements.txt keeps everyone in sync automatically 

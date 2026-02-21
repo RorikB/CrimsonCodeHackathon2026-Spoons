@@ -16,7 +16,7 @@ Tools for Development/Environment
 visual studio code (as the IDE)
 python virtual environment (venv) to isolate project dependencies
 requirements.txt so we all have same library versions
-Python version 3.14
+Python version 3.14.3
 
 put these in a requirements.txt and everyone should run pip install -r requirements.txt
 and then we need a virtual environment venv and just update requirements.txt whenever a new library is added.

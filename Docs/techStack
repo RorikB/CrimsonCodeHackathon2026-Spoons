@@ -1,0 +1,242 @@
+🏆 Best Stack for Local Smart Mirror
+🥇 Python + PyQt (or Tkinter if needed)
+
+This gives you:
+
+Fullscreen desktop UI
+
+Direct mic access
+
+Local voice processing
+
+Clean windowed dashboard
+
+Easy future deployment to Raspberry Pi
+
+No browser. No server. No API routing.
+
+Everything runs in one app.
+
+🧠 Recommended Language Choice
+👉 Use Python for Everything
+
+Why?
+
+Voice recognition → Python friendly
+
+TTS → Python friendly
+
+Weather API → Python requests
+
+Timer logic → Easy
+
+Desktop UI → PyQt
+
+Later Pi deployment → Python runs natively
+
+This removes cross-language complexity.
+
+🖥 UI Framework Options
+🥇 Option 1: PyQt6 (Best Choice)
+
+Modern
+Customizable
+Looks professional
+Good for fullscreen dashboard
+
+Install:
+
+pip install PyQt6
+🥈 Option 2: Tkinter
+
+Built into Python
+Simpler
+Less modern looking
+
+Works, but less polished.
+
+🥉 Option 3: Kivy
+
+Cool but steeper learning curve.
+
+For 24 hours → PyQt is ideal.
+
+🧱 Clean Architecture (Local App)
+SmartMirrorApp
+│
+├── main.py
+├── ui.py
+├── voice.py
+├── weather.py
+├── calendar.py
+├── timer.py
+└── config.py
+
+Everything runs inside one process.
+
+🧠 Core System Design
+1️⃣ Main UI Loop
+
+Fullscreen black window
+
+Clock widget
+
+Weather widget
+
+Calendar widget
+
+Timer widget
+
+2️⃣ Background Voice Thread
+
+Constantly listens
+
+Converts speech → text
+
+Sends command to handler
+
+3️⃣ Command Router
+
+Parses text
+
+Updates UI state
+
+Triggers TTS
+
+No HTTP. No REST.
+
+Just function calls.
+
+🎤 Voice Setup (Local)
+Speech-to-Text Options:
+🥇 Option A: OpenAI Whisper API
+
+Easy and accurate
+Requires internet
+
+🥈 Option B: Local Whisper (faster-whisper)
+
+Works offline
+Heavier setup
+
+For hackathon reliability → use API.
+
+🔊 Text-to-Speech (Local)
+
+Use:
+
+pip install pyttsx3
+
+No internet required.
+Works instantly.
+
+🌦 Weather
+
+Use requests:
+
+pip install requests
+
+Pull from OpenWeather API.
+Update every 10–15 minutes.
+
+🕒 Timer
+
+Simple Python threading or QTimer inside PyQt.
+
+👥 Team Role Split (Updated For Local App)
+👤 Person 1 — UI (PyQt)
+
+Fullscreen window
+
+Layout
+
+Clock
+
+Weather display
+
+Timer display
+
+👤 Person 2 — Voice System
+
+Mic capture
+
+Whisper integration
+
+Background listening thread
+
+👤 Person 3 — Logic Engine
+
+Command parsing
+
+Timer management
+
+Weather fetching
+
+Calendar data
+
+👤 Person 4 — Integration + Polish
+
+Connect voice to UI
+
+Add TTS
+
+Handle state updates
+
+Smooth animations
+
+No one overlaps heavily.
+
+🖥 Fullscreen Mode Example (PyQt)
+
+You’ll do something like:
+
+self.showFullScreen()
+
+Black background.
+White text.
+Large clock.
+
+That’s your mirror.
+
+⚡ Why This Is The Right Decision
+
+Because:
+
+It runs offline
+
+No web browser dependency
+
+Easy to port to Raspberry Pi later
+
+No frontend/backend sync issues
+
+Fewer moving parts
+
+Less failure risk during demo
+
+This is now a real embedded prototype, not a website.
+
+🏁 What You Should Install Right Now
+
+Everyone:
+
+pip install PyQt6
+pip install requests
+pip install pyttsx3
+
+Voice person also:
+
+pip install openai
+🚀 Next Step
+
+Do you want:
+
+A minimal working PyQt fullscreen starter template?
+
+A voice listener skeleton?
+
+A clean folder structure with starter files?
+
+A 24-hour execution timeline for this local version?
+
+Help choosing between Whisper API vs local model?

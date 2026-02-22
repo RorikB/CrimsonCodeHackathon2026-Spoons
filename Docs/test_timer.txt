@@ -1,3 +1,31 @@
+TIMER TESTING GUIDE
+===================
+
+The Timer class now has a GUI display for visual countdown.
+
+OPTION 1: GUI Display (Recommended)
+------------------------------------
+from timer_gui import TimerGUI
+
+# Create and run timer with GUI (10 seconds)
+timer_gui = TimerGUI()
+timer_gui.run(10)
+
+Features:
+- Large countdown display (MM:SS format)
+- Color changes:
+  * Green when running
+  * Red in last 10 seconds
+  * Gray when inactive
+- Shows "TIME'S UP!" when finished
+- Press 'Q' to quit anytime
+
+Run it:
+python timer_gui.py
+
+
+OPTION 2: Console/Terminal (Original)
+--------------------------------------
 import time
 from timer import Timer
 
@@ -9,3 +37,48 @@ while timer.is_active():
     time.sleep(1)
 
 print("Timer finished!")
+
+This prints countdown to console (no GUI).
+
+
+USING TIMER IN YOUR CODE
+-------------------------
+from timer import Timer
+
+# Create timer
+timer = Timer()
+
+# Start 60 second countdown
+timer.start(60)
+
+# Check if still running
+if timer.is_active():
+    print("Timer is running")
+
+# Get remaining time
+remaining = timer.get_remaining_time()
+print(f"{remaining} seconds left")
+
+# Stop timer early
+timer.stop()
+
+
+TIMER CLASS METHODS
+-------------------
+timer.start(duration_seconds)  - Start countdown
+timer.stop()                   - Stop and reset timer
+timer.is_active()              - Returns True if running
+timer.get_remaining_time()     - Returns seconds remaining (int)
+timer.get_duration()           - Returns original duration
+
+
+GUI CUSTOMIZATION
+-----------------
+from timer_gui import TimerGUI
+
+# Create with custom size
+timer_gui = TimerGUI(width=600, height=400)
+
+# Run with custom duration
+timer_gui.run(120)  # 2 minutes
+

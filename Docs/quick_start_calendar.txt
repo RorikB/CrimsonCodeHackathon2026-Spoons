@@ -1,0 +1,126 @@
+CALENDAR QUICK START GUIDE
+==========================
+
+Choose your path based on setup time:
+
+PATH 1: LOCAL .ICS FILE (30 seconds, no setup)
+===============================================
+
+STEP 1: Export your calendar
+1. Google Calendar: calendar.google.com → Settings → Import & Export → Export
+2. Outlook: Open Calendar → File → Save Calendar as .ics
+3. Apple Calendar: File → Export → Export calendar
+
+STEP 2: Move the file to the project folder
+Just drag the .ics file into the project folder
+
+STEP 3: Run it
+powershell
+python whats_my_day_like.py your_calendar.ics
+```
+
+Done! You'll see your calendar events printed.
+
+Pros: ✓ Zero setup, ✓ Works offline
+Cons: ✗ Manual updates (re-export to refresh)
+
+
+PATH 2: GOOGLE CALENDAR API (5 minutes, real-time)
+=================================================
+
+STEP 1: Create Google Cloud Project (2 min)
+1. Go to: https://console.cloud.google.com/
+2. Sign in with YOUR Google account
+3. Click "Select a project" → "NEW PROJECT"
+4. Name it anything (e.g., "SmartMirror")
+5. Wait for creation
+
+STEP 2: Enable Calendar API (30 sec)
+1. Search for "Google Calendar API"
+2. Click it
+3. Click blue "ENABLE" button
+
+STEP 3: Create OAuth Credentials (2 min)
+1. Go to "APIs & Services" → "Credentials" (left sidebar)
+2. Click "Create Credentials" → "OAuth client ID"
+3. If prompted, configure OAuth consent screen:
+   - Choose "External"
+   - App name: anything
+   - Email: your email
+   - Save
+4. Back to Credentials, click "Create Credentials" → "OAuth client ID" again
+5. Choose "Desktop application"
+6. Click "CREATE"
+7. Click "DOWNLOAD" (the JSON file)
+
+STEP 4: Place credentials.json in project folder
+1. Rename downloaded file to: credentials.json
+2. Move to project folder (same level as google_calendar_api.py)
+
+STEP 5: Install packages
+```powershell
+pip install google-auth google-auth-oauthlib google-auth-httplib2 google-api-python-client
+```
+
+(You might already have these from requirements.txt)
+
+STEP 6: Run it
+```powershell
+python google_calendar_api.py
+```
+
+First run: Browser opens → Sign in → Click "Allow" → Done!
+Future runs: Just works automatically!
+
+Pros: ✓ Real-time sync, ✓ Always up-to-date, ✓ No manual updates
+Cons: ✗ 5 min setup (one-time)
+
+
+WHICH ONE SHOULD I USE?
+=======================
+
+Use PATH 1 (.ics file) if:
+- You want instant setup (literally copy a file)
+- You don't mind manually exporting every month
+- You prefer everything local
+
+Use PATH 2 (Google API) if:
+- You want real-time calendar data
+- You're okay with 5 min setup
+- You want "smart mirror" experience (always current)
+
+
+TROUBLESHOOTING
+===============
+
+"credentials.json not found"
+→ Make sure you downloaded it and put it in the project folder
+
+Browser shows "Unverified app" warning
+→ This is normal. Click "Go to [app name] (unsafe)" - your data is safe
+
+"Error 403: access_denied"
+→ Follow GOOGLE_CALENDAR_API_SETUP.txt to add yourself as test user
+
+Still stuck?
+→ Use PATH 1 instead (.ics file) - zero configuration!
+
+
+WHAT HAPPENS TO MY DATA?
+=======================
+
+✅ Your calendar stays private
+✅ Only you can access it
+✅ Each person uses their own credentials
+✅ credentials.json and token.json never get shared
+
+
+QUESTIONS?
+==========
+
+See these files for more details:
+- CALENDAR_USAGE.txt (features & examples)
+- GOOGLE_CALENDAR_API_SETUP.txt (detailed setup)
+- CALENDAR_API_EXPLAINED.txt (how it works)
+
+Or just use PATH 1 - no questions needed!

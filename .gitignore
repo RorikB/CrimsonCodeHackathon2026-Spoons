@@ -132,6 +132,14 @@ ENV/
 env.bak/
 venv.bak/
 
+# Google Calendar API credentials (KEEP PRIVATE!)
+credentials.json
+token.json
+
+# Calendar files (private data)
+*.ics
+calendar_cache/
+
 # Spyder project settings
 .spyderproject
 .spyproject

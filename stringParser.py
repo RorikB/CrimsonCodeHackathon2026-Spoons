@@ -2,7 +2,7 @@ import re
 import elevenLabs
 import clock_gui
 import lamma
-import timer
+from timer import Timer
 # import google_calendar_api
 import spotify_player
 
@@ -15,12 +15,13 @@ def add(a, b):
     print(f"{a} + {b} = {result}")
     elevenLabs.prompt_elevenlabs(f"The result of adding {a} and {b} is {result}")
     return result
+timer = Timer()
 
 FUNCTION_MAP = {
     "hello": hello,
     "add": add,
     "clock": lambda: elevenLabs.prompt_elevenlabs(f"The time is {clock_gui.ClockGUI().get_time_string()}"),
-    "timer": lambda duration=None: elevenLabs.prompt_elevenlabs(timer.get_status_string() if duration is None else timer.start(int(duration))),
+    "timer": lambda *args: timer.start(*args),
     # "calendar": lambda: elevenLabs.prompt_elevenlabs(google_calendar_api.GoogleCalendarAPI().run()),
     # "calendar": lambda: elevenLabs.prompt_elevenlabs(llama.chat("What is on my calendar today?")),
     "pause": lambda: spotify_player.SpotifyPlayer().play_pause(),

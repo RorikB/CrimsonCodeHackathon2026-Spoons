@@ -52,6 +52,7 @@ class SmartMirror(tk.Tk):
         self.calendar_ready = self.calendar.authenticate()
 
         self.timer = Timer()
+        self.timer.start(100)
 
         self.build_ui()
         self.update_clock()

@@ -7,7 +7,8 @@ class Timer:
         self.end_time = None
         self.active = False
 
-    def start(self, duration_seconds: int):
+    def start(self, duration_seconds):
+        duration_seconds = float(duration_seconds)
         self.start_time = time.time()
         self.duration = duration_seconds
         self.end_time = self.start_time + duration_seconds

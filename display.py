@@ -2,9 +2,10 @@ import tkinter as tk
 from datetime import datetime
 
 # from fastapi import requests
-from backenedWeather import weather
+#from backenedWeather import weather
 from backenedWeather.weather import get_weather_data
 
+from timer import Timer
 
 # --- Placeholder Values ---
 PLACEHOLDER_TIME = "12:00 PM"
@@ -24,6 +25,9 @@ PLACEHOLDER_NEWS = [
 class SmartMirror(tk.Tk):
     def __init__(self):
         super().__init__()
+        self.timer = Timer()
+        self.timer.start(100)
+
         self.title("Smart Mirror")
         self.configure(bg="black")
         self.attributes("-fullscreen", True)
@@ -36,6 +40,7 @@ class SmartMirror(tk.Tk):
         self.build_ui()
         self.update_clock()
         self.update_weather()
+        self.update_timer()
         self.after(300, self.fade_greeting)
 
     def build_ui(self):
@@ -85,7 +90,9 @@ class SmartMirror(tk.Tk):
 
         # # ── Divider ──────────────────────────────────────────────
         # tk.Frame(self, bg="#333333", height=1).pack(fill="x", padx=40)
-
+        #_______________________________________________________
+        
+        
         # ── Greeting ─────────────────────────────────────────────
         greeting_frame = tk.Frame(self, bg="black")
         greeting_frame.pack(pady=40)
@@ -113,7 +120,27 @@ class SmartMirror(tk.Tk):
                      font=("Helvetica Neue", 16),
                      fg="#AAAAAA", bg="black",
                      wraplength=900, justify="left").pack(anchor="w", pady=4)
+            
+        self.timer_frame = tk.Frame(self, bg="black")
+        self.timer_frame.place(relx=0.05, rely=0.5, anchor="w")  # middle-left
 
+        self.timer_title = tk.Label(
+            self.timer_frame,
+            text="TIMER",
+            font=("Helvetica Neue", 12, "bold"),
+            fg="#555555",
+            bg="black"
+        )
+        self.timer_title.pack(anchor="w")
+
+        self.timer_label = tk.Label(
+            self.timer_frame,
+            text="⏱ 00:00",
+            font=("Helvetica Neue", 14, "bold"),
+            fg="#FFFFFF",
+            bg="black"
+        )
+        self.timer_label.pack(anchor="w", pady=(5, 0))
     # ── Clock ─────────────────────────────────────────────────────
     def update_clock(self):
         now = datetime.now()
@@ -135,7 +162,15 @@ class SmartMirror(tk.Tk):
             self.weather_wind_label.config(text=f"Wind: {weather['wind_speed']}")
 
         # Schedule next update in 10 minutes (600000 ms)
-        self.after(600000, self.update_weather)
+        
+        self.after(600000, self.update_weather) 
+        middle_frame = tk.Frame(self, bg="black")
+        middle_frame.pack(fill="both", expand=True)
+
+        timer_container = tk.Frame(middle_frame, bg="black")
+        timer_container.pack(anchor="w", padx=60)  # Left aligned & centered vertically
+
+      
 
     # ── Smooth fade in / pause / fade out ────────────────────
     def fade_greeting(self):
@@ -168,7 +203,13 @@ class SmartMirror(tk.Tk):
         self._fade_direction = -1
         self._fade_paused = False
         self.fade_greeting()
+#--------Timer --------------------------
+    def update_timer(self):
+        self.timer_label.config(text=f" {self.timer.get_status_string()}")
+        self.after(1000, self.update_timer)
 
+
+        
 if __name__ == "__main__":
     app = SmartMirror()
     app.mainloop()

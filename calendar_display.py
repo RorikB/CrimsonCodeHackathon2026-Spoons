@@ -8,7 +8,7 @@ Can be placed in top-right corner like a smart mirror widget.
 
 import cv2
 import numpy as np
-from google_calendar_api import GoogleCalendarAPI
+from backenedWeather.google_calendar_api import GoogleCalendarAPI
 from datetime import datetime
 
 class GoogleCalendarDisplay:

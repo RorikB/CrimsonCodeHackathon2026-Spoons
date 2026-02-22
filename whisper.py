@@ -4,6 +4,7 @@ import gemini
 import time
 import lamma
 import stringParser
+import pygame
 latest_text = ""
 recorder = None 
 
@@ -28,6 +29,10 @@ def process_text(text):
 
 def on_wakeword_detected():
     print("Wake word detected!")
+    pygame.init()
+    pygame.mixer.init()
+    pygame.mixer.music.load('universfield-notification-beep-229154.mp3')
+    pygame.mixer.music.play()
 
 def speech_to_text():
     get_recorder().text(process_text)

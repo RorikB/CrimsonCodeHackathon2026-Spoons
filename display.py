@@ -9,6 +9,20 @@ from backenedWeather.google_calendar_api import GoogleCalendarAPI
 
 from spotify_widget import SpotifyWidget
 
+import vision
+import whisper
+import threading
+
+face_detected = False
+
+def run_vision():
+   while True:
+       result = vision.check_for_face()
+       global face_detected
+       face_detected = result
+def run_whisper():
+   while True:
+       whisper.speech_to_text()
 
 # --- Placeholder Values ---
 PLACEHOLDER_TIME = "12:00 PM"
@@ -212,5 +226,11 @@ class SmartMirror(tk.Tk):
         self.fade_greeting()
 
 if __name__ == "__main__":
+       # vision_thread = threading.Thread(target=run_vision, daemon=True)
+    whisper_thread = threading.Thread(target=run_whisper, daemon=True)
+
+
+   # vision_thread.start()
+    whisper_thread.start()
     app = SmartMirror()
     app.mainloop()

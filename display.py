@@ -1,6 +1,7 @@
 
 import tkinter as tk
 from datetime import datetime
+from timer import Timer
 
 # from fastapi import requests
 
@@ -43,17 +44,20 @@ class SmartMirror(tk.Tk):
         self.attributes("-fullscreen", True)
         self.bind("<Escape>", lambda e: self.destroy())
 
-        self._fade_brightness = 0       # 0 = invisible, 255 = fully visible
-        self._fade_direction = 1        # 1 = fade in, -1 = fade out
+        self._fade_brightness = 0     
+        self._fade_direction = 1       
         self._fade_paused = False
 
         self.calendar = GoogleCalendarAPI()
         self.calendar_ready = self.calendar.authenticate()
 
+        self.timer = Timer()
+
         self.build_ui()
         self.update_clock()
         self.update_weather()
         self.update_calendar()
+        self.update_timer_display()
         self.after(300, self.fade_greeting)
 
     def build_ui(self):
@@ -63,6 +67,7 @@ class SmartMirror(tk.Tk):
 
         left_frame = tk.Frame(top_frame, bg="black")
         left_frame.pack(side="left")
+
 
         self.time_label = tk.Label(
             left_frame, text=PLACEHOLDER_TIME,
@@ -118,24 +123,37 @@ class SmartMirror(tk.Tk):
         # # ── Divider ──────────────────────────────────────────────
         # tk.Frame(self, bg="#333333", height=1).pack(fill="x", padx=40)
 
+        
         # ── News Feed ─────────────────────────────────────────────
         news_frame = tk.Frame(self, bg="black")
         news_frame.pack(fill="x", padx=40, pady=30, side="bottom")
 
+        # ── Timer Display (above calendar)
+        self.timer_label = tk.Label(
+            news_frame,  # pack inside the same frame as calendar
+            text="",
+            font=("Helvetica Neue", 48, "bold"),
+            fg="#00FFAA",
+            bg="black"
+        )
+        self.timer_label.pack(anchor="w", pady=(0, 10))  # small bottom margin
+
         tk.Label(news_frame, text="Calendar",
-            font=("Helvetica Neue", 14, "bold"),
-            fg="#555555", bg="black").pack(anchor="w")
+            font=("Helvetica Neue", 16, "bold"),  # increase heading font
+            fg="#555555", bg="black").pack(anchor="w", pady=(0,5))  # add small bottom padding
 
         self.calendar_label = tk.Label(
             news_frame,
             text="Loading events...",
-            font=("Helvetica Neue", 16),
+            font=("Helvetica Neue", 18),          # slightly bigger font
             fg="#AAAAAA",
             bg="black",
-            wraplength=900,
-            justify="left"
+            wraplength=1000,                       # increase width so it can display more text per line
+            justify="left",
+            pady=10                                # add vertical padding to give more height
         )
-        self.calendar_label.pack(anchor="w", pady=4)
+        self.calendar_label.pack(anchor="w", pady=(0, 40))
+
 
         # ── Spotify Widget ───────────────────────────────────────  
         self.spotify_widget = SpotifyWidget(self, width=300, height=260, enable_voice=True)
@@ -192,6 +210,17 @@ class SmartMirror(tk.Tk):
 
         self.calendar_label.config(text=display_text)
         self.after(600000, self.update_calendar)
+
+    def update_timer_display(self):
+        if self.timer.is_active():
+            remaining = self.timer.get_remaining_time()
+            minutes = remaining // 60
+            seconds = remaining % 60
+            self.timer_label.config(text=f"{minutes:02}:{seconds:02}")
+        else:
+            self.timer_label.config(text="")
+
+        self.after(500, self.update_timer_display)
 
     # ── Smooth fade in / pause / fade out ────────────────────
     def fade_greeting(self):

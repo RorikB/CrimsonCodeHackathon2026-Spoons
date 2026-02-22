@@ -13,6 +13,10 @@ BACKEND_DIR = BASE_DIR.parent / "backenedWeather"
 
 print("Starting backend from:", BACKEND_DIR)
 
+# Add backend folder to Python path
+sys.path.append(str(BACKEND_DIR))
+from weather import get_weather_data
+
 backend_process = subprocess.Popen(
     [sys.executable, "-m", "uvicorn", "main:app", "--port", "8001"],
     cwd=str(BACKEND_DIR)

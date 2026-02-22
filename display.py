@@ -1,6 +1,10 @@
 import tkinter as tk
 from datetime import datetime
 
+# from fastapi import requests
+from backenedWeather import weather
+from backenedWeather.weather import get_weather_data
+
 
 # --- Placeholder Values ---
 PLACEHOLDER_TIME = "12:00 PM"
@@ -31,6 +35,7 @@ class SmartMirror(tk.Tk):
 
         self.build_ui()
         self.update_clock()
+        self.update_weather()
         self.after(300, self.fade_greeting)
 
     def build_ui(self):
@@ -58,16 +63,25 @@ class SmartMirror(tk.Tk):
         right_frame = tk.Frame(top_frame, bg="black")
         right_frame.pack(side="right")
 
-        tk.Label(right_frame, text=PLACEHOLDER_WEATHER_ICON,
-                 font=("Helvetica Neue", 52), fg="white", bg="black").pack(anchor="e")
-        tk.Label(right_frame, text=PLACEHOLDER_TEMP,
-                 font=("Helvetica Neue", 52, "bold"), fg="white", bg="black").pack(anchor="e")
-        tk.Label(right_frame, text=PLACEHOLDER_WEATHER,
-                 font=("Helvetica Neue", 20), fg="#AAAAAA", bg="black").pack(anchor="e")
-        tk.Label(right_frame, text=PLACEHOLDER_HUMIDITY,
-                 font=("Helvetica Neue", 16), fg="#888888", bg="black").pack(anchor="e")
-        tk.Label(right_frame, text=PLACEHOLDER_WIND,
-                 font=("Helvetica Neue", 16), fg="#888888", bg="black").pack(anchor="e")
+        self.weather_icon_label = tk.Label(right_frame, text=PLACEHOLDER_WEATHER_ICON,
+                                   font=("Helvetica Neue", 52), fg="white", bg="black")
+        self.weather_icon_label.pack(anchor="e")
+
+        self.weather_temp_label = tk.Label(right_frame, text=PLACEHOLDER_TEMP,
+                                   font=("Helvetica Neue", 52, "bold"), fg="white", bg="black")
+        self.weather_temp_label.pack(anchor="e")
+
+        self.weather_condition_label = tk.Label(right_frame, text=PLACEHOLDER_WEATHER,
+                                        font=("Helvetica Neue", 20), fg="#AAAAAA", bg="black")
+        self.weather_condition_label.pack(anchor="e")
+
+        self.weather_humidity_label = tk.Label(right_frame, text=PLACEHOLDER_HUMIDITY,
+                                      font=("Helvetica Neue", 16), fg="#888888", bg="black")
+        self.weather_humidity_label.pack(anchor="e")
+
+        self.weather_wind_label = tk.Label(right_frame, text=PLACEHOLDER_WIND,
+                                   font=("Helvetica Neue", 16), fg="#888888", bg="black")
+        self.weather_wind_label.pack(anchor="e")
 
         # # ── Divider ──────────────────────────────────────────────
         # tk.Frame(self, bg="#333333", height=1).pack(fill="x", padx=40)
@@ -107,6 +121,22 @@ class SmartMirror(tk.Tk):
         self.date_label.config(text=now.strftime("%A, %B %d, %Y"))
         self.after(1000, self.update_clock)
 
+    def update_weather(self):
+        weather = get_weather_data()
+        if "error" in weather:
+            self.weather_temp_label.config(text="Weather unavailable")
+            self.weather_condition_label.config(text="")
+            self.weather_humidity_label.config(text="")
+            self.weather_wind_label.config(text="")
+        else:
+            self.weather_temp_label.config(text=weather["temperature"])
+            self.weather_condition_label.config(text=weather["condition"])
+            self.weather_humidity_label.config(text=f"Humidity: {weather['humidity']}")
+            self.weather_wind_label.config(text=f"Wind: {weather['wind_speed']}")
+
+        # Schedule next update in 10 minutes (600000 ms)
+        self.after(600000, self.update_weather)
+
     # ── Smooth fade in / pause / fade out ────────────────────
     def fade_greeting(self):
         FADE_SPEED = 4          # brightness change per tick (lower = smoother)
@@ -138,7 +168,6 @@ class SmartMirror(tk.Tk):
         self._fade_direction = -1
         self._fade_paused = False
         self.fade_greeting()
-
 
 if __name__ == "__main__":
     app = SmartMirror()

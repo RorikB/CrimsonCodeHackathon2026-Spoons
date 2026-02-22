@@ -4,6 +4,7 @@ import time
 from timer import Timer
 
 class TimerInputGUI:
+    # hardcoded gui stuff replace with the zones instead
     def __init__(self, width=500, height=450):
         self.width = width
         self.height = height

@@ -3,7 +3,7 @@ import numpy as np
 from .layout import get_layout_zones
 from .render import render_zones
 
-def fullscreen_mirror(state, focus=None):
+def fullscreen_mirror(state, focus=None,per_frame_callback=None):
     height, width = 1080, 1920
     frame = np.zeros((height, width, 3), dtype=np.uint8)
 
@@ -16,6 +16,12 @@ def fullscreen_mirror(state, focus=None):
     while True:
         frame[:] = 0 
 
+
+        # update state each frame (Timer, or anything else dynamic)
+        if per_frame_callback:
+            per_frame_callback()
+
+
         # adjust zone focus
         for zone in zones:
             if focus and zone.name == focus:
@@ -27,7 +33,7 @@ def fullscreen_mirror(state, focus=None):
                 zone.target_h = zone.h
                 zone.opacity = 0.3 if focus else 1.0
 
-        frame = render_zones(frame,zones, state)
+        frame = render_zones(frame,zones, state, timer=timer)
         cv2.imshow(window_name, frame)
 
         key = cv2.waitKey(1) & 0xFF
@@ -35,7 +41,7 @@ def fullscreen_mirror(state, focus=None):
             break
 
         elif key == ord('w'):
-            focus = "Weather"
+            focus == "Weather"
         elif key == ord('t'):
             focus = "Time"
         elif key == ord('c'):

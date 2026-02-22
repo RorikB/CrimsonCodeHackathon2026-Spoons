@@ -4,6 +4,7 @@ import vision
 import whisper
 import time
 
+
 face_detected = False
 
 def run_vision():

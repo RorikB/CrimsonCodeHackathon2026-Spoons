@@ -1,4 +1,5 @@
 import threading
+import lamma
 import vision
 import whisper
 import time
@@ -9,7 +10,7 @@ def run_vision():
     while True:
         result = vision.check_for_face()
         global face_detected
-
+        face_detected = result
 
 def run_whisper():
     while True:
@@ -17,6 +18,8 @@ def run_whisper():
 
 
 if __name__ == "__main__":
+    # lamma.chat("Hello, how are you?")
+
     vision_thread = threading.Thread(target=run_vision, daemon=True)
     whisper_thread = threading.Thread(target=run_whisper, daemon=True)
 
@@ -25,5 +28,5 @@ if __name__ == "__main__":
 
 
     while True:
-        print("Face Detected:", face_detected)
+        # print("Face Detected:", face_detected)
         time.sleep(1)

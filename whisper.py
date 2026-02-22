@@ -2,7 +2,8 @@ from RealtimeSTT import AudioToTextRecorder
 import elevenLabs
 import gemini
 import time
-
+import lamma
+import stringParser
 latest_text = ""
 recorder = None 
 
@@ -10,10 +11,10 @@ def get_recorder():
     global recorder
     if recorder is None:
         recorder = AudioToTextRecorder(
-            # wake_words="blueberry",
-            # wakeword_backend="pvporcupine",
-            # on_wakeword_detected=on_wakeword_detected,
-            # wake_words_sensitivity=0.7,
+            wake_words="blueberry",
+            wakeword_backend="pvporcupine",
+            on_wakeword_detected=on_wakeword_detected,
+            wake_words_sensitivity=0.7,
             model="medium.en",
             device="cuda",
             silero_sensitivity=0.7,
@@ -31,9 +32,14 @@ def on_wakeword_detected():
 def speech_to_text():
     get_recorder().text(process_text)
     # recorder.text(process_text)
-    start = time.process_time()
+    # start = time.process_time()
     # elevenLabs.prompt_elevenlabs(gemini.prompt_gemini(latest_text))
-    print("\nTime Taken: "+ str(time.process_time() - start))
+    output = lamma.chat(latest_text)
+    if not stringParser.check_for_command(output):
+        elevenLabs.prompt_elevenlabs(output)
+
+
+    # print("\nTime Taken: "+ str(time.process_time() - start))
 
 
 if __name__ == '__main__': # needed for multiprecessing

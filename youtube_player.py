@@ -6,8 +6,63 @@ import threading
 from yt_dlp import YoutubeDL
 import time
 
+class YouTubeSearchGUI:
+    def __init__(self, width=600, height=400):
+        self.width = width
+        self.height = height
+        self.search_text = ""
+        self.cursor_pos = 0
+        self.searching = False
+        self.result_title = None
+        
+    def draw_input_screen(self, frame):
+        """Draw the search input screen"""
+        cv2.rectangle(frame, (0, 0), (self.width, self.height), (20, 20, 20), -1)
+        
+        # Title
+        cv2.putText(frame, "YOUTUBE SEARCH", (self.width//2 - 130, 60),
+                   cv2.FONT_HERSHEY_SIMPLEX, 1.2, (255, 0, 0), 2)
+        
+        # Input box
+        cv2.rectangle(frame, (40, 120), (self.width - 40, 170), (50, 50, 50), 2)
+        cv2.putText(frame, "Search:", (50, 110),
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.7, (200, 200, 200), 1)
+        
+        # Display search text with cursor
+        display_text = self.search_text[:35] if len(self.search_text) > 35 else self.search_text
+        cv2.putText(frame, display_text, (50, 155),
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 1)
+        
+        # Cursor - taller and better aligned with text
+        cursor_x = 50 + len(display_text) * 12
+        cv2.line(frame, (cursor_x, 130), (cursor_x, 165), (100, 200, 255), 2)
+        
+        # Status
+        y_pos = 220
+        if self.searching:
+            cv2.putText(frame, "Searching YouTube...", (60, y_pos),
+                       cv2.FONT_HERSHEY_SIMPLEX, 0.7, (100, 200, 255), 1)
+        elif self.result_title:
+            # Clear search box text display when showing result
+            cv2.putText(frame, " " * 40, (50, 155),
+                       cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 1)
+            
+            cv2.putText(frame, f"Found: {self.result_title[:45]}", (40, y_pos),
+                       cv2.FONT_HERSHEY_SIMPLEX, 0.65, (100, 255, 100), 1)
+            y_pos += 40
+            cv2.putText(frame, "Press ENTER to play or ESC to search again", (40, y_pos),
+                       cv2.FONT_HERSHEY_SIMPLEX, 0.6, (150, 150, 150), 1)
+        
+        # Instructions
+        cv2.putText(frame, "Type search query, press ENTER to search", (40, self.height - 80),
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.6, (150, 150, 150), 1)
+        cv2.putText(frame, "ESC to exit", (40, self.height - 40),
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.6, (150, 150, 150), 1)
+        
+        return frame
+
 class YouTubePlayer:
-    def __init__(self, width=1000, height=700):
+    def __init__(self, width=600, height=700):
         self.width = width
         self.height = height
         self.running = True
@@ -15,6 +70,9 @@ class YouTubePlayer:
         self.video_title = None
         self.video_process = None
         self.is_playing = False
+        self.search_mode = True
+        self.search_gui = YouTubeSearchGUI(width, 400)
+        self.result_found = False  # Track when search result is ready for user action
         
     def search_youtube(self, query):
         """Search for a YouTube video and return the URL"""
@@ -39,14 +97,13 @@ class YouTubePlayer:
         return False
     
     def play_video(self):
-        """Play the video using VLC"""
+        """Play the video using VLC in background"""
         if not self.video_url:
             return False
         
         try:
             print(f"Playing: {self.video_title}")
-            # Use VLC to play the video
-            vlc_path = "vlc"  # Assumes VLC is in PATH
+            vlc_path = "vlc"
             
             # Try to find VLC installation
             possible_paths = [
@@ -62,7 +119,7 @@ class YouTubePlayer:
                     vlc_found = True
                     break
                 elif path == "vlc":
-                    vlc_found = True  # Assume it's in PATH
+                    vlc_found = True
             
             if vlc_found:
                 self.video_process = subprocess.Popen(
@@ -88,113 +145,142 @@ class YouTubePlayer:
             self.is_playing = False
             self.video_process = None
     
-    def draw_input_screen(self, frame):
-        """Draw the YouTube search/input screen"""
+    def draw_player_screen(self, frame):
+        """Draw the video player display"""
         cv2.rectangle(frame, (0, 0), (self.width, self.height), (20, 20, 20), -1)
         
         # Title
-        cv2.putText(frame, "YOUTUBE VIDEO PLAYER", (self.width//2 - 200, 80),
-                   cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255, 0, 0), 2)
+        cv2.putText(frame, "YOUTUBE PLAYER", (self.width//2 - 130, 50),
+                   cv2.FONT_HERSHEY_SIMPLEX, 1.2, (255, 0, 0), 2)
+        
+        if self.video_title:
+            y_offset = 120
+            
+            # Video title
+            title = self.video_title
+            if len(title) > 60:
+                title = title[:57] + "..."
+            cv2.putText(frame, title, (20, y_offset),
+                       cv2.FONT_HERSHEY_SIMPLEX, 0.8, (200, 200, 200), 1)
+            y_offset += 50
+            
+            # Status
+            status = "[>] Playing" if self.is_playing else "[||] Stopped"
+            status_color = (0, 255, 0) if self.is_playing else (100, 100, 100)
+            cv2.putText(frame, status, (20, y_offset),
+                       cv2.FONT_HERSHEY_SIMPLEX, 1, status_color, 2)
+            y_offset += 60
+            
+            # Info
+            cv2.putText(frame, "Playing in VLC (minimize this window to watch)", (20, y_offset),
+                       cv2.FONT_HERSHEY_SIMPLEX, 0.6, (150, 150, 150), 1)
+        else:
+            cv2.putText(frame, "No video selected", (50, 200),
+                       cv2.FONT_HERSHEY_SIMPLEX, 1, (200, 100, 100), 2)
         
         # Instructions
-        y_pos = 200
-        cv2.putText(frame, "Enter a YouTube URL or search query:", (80, y_pos),
-                   cv2.FONT_HERSHEY_SIMPLEX, 0.8, (200, 200, 200), 1)
-        
-        y_pos += 50
-        cv2.putText(frame, "(Examples: 'Never Gonna Give You Up' or 'https://youtube.com/...')", (80, y_pos),
-                   cv2.FONT_HERSHEY_SIMPLEX, 0.6, (150, 150, 150), 1)
-        
-        y_pos += 100
-        cv2.putText(frame, "Type in terminal and press ENTER to search", (80, y_pos),
-                   cv2.FONT_HERSHEY_SIMPLEX, 0.7, (100, 200, 255), 1)
-        
-        y_pos += 50
-        cv2.putText(frame, "Current video: " + (self.video_title[:50] if self.video_title else "None"), 
-                   (80, y_pos), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (100, 255, 100), 1)
-        
-        y_pos += 50
-        status = "▶ Playing" if self.is_playing else "⏸ Stopped"
-        status_color = (0, 255, 0) if self.is_playing else (180, 180, 180)
-        cv2.putText(frame, status, (80, y_pos), cv2.FONT_HERSHEY_SIMPLEX, 0.8, status_color, 2)
-        
-        # Instructions at bottom
-        y_pos = self.height - 80
-        cv2.putText(frame, "CONTROLS:", (80, y_pos), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (200, 200, 200), 1)
-        y_pos += 35
-        cv2.putText(frame, "ESC - Exit | S - Stop video", (80, y_pos), 
-                   cv2.FONT_HERSHEY_SIMPLEX, 0.6, (150, 150, 150), 1)
+        cv2.putText(frame, "S: Search | ESC: Exit", (20, self.height - 30),
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.6, (100, 100, 100), 1)
         
         return frame
     
+    def search_thread(self, query):
+        """Run search in background thread"""
+        if self.search_youtube(query):
+            self.search_gui.result_title = self.video_title
+            self.result_found = True  # Signal that result is ready
+            print(f"Found: {self.video_title}")
+        else:
+            self.search_gui.result_title = None
+            self.result_found = False
+            print("Video not found")
+        self.search_gui.searching = False
+    
     def run(self):
-        """Run the YouTube player"""
+        """Run the YouTube player with GUI"""
         print("Starting YouTube Player...")
-        print("Usage: Type a YouTube URL or search query in the terminal")
+        print("Controls: Type search query | ENTER to search | ESC to exit")
         
         while self.running:
-            frame = np.zeros((self.height, self.width, 3), dtype=np.uint8)
-            frame = self.draw_input_screen(frame)
+            if self.search_mode:
+                # If result found, show it and wait for user action
+                if self.result_found:
+                    frame = np.zeros((self.search_gui.height, self.search_gui.width, 3), dtype=np.uint8)
+                    frame = self.search_gui.draw_input_screen(frame)
+                    cv2.imshow("YouTube Search", frame)
+                    
+                    key = cv2.waitKey(100) & 0xFF
+                    
+                    if key == 13:  # ENTER to play
+                        if self.video_url:  # Make sure URL is set
+                            print(f"Starting playback of: {self.video_title}")
+                            if self.play_video():
+                                print("Video launched successfully")
+                                self.search_mode = False
+                                self.result_found = False
+                                time.sleep(0.5)  # Give VLC time to start
+                                cv2.destroyWindow("YouTube Search")
+                            else:
+                                print("Failed to launch video")
+                        else:
+                            print("Error: Video URL not set")
+                    elif key == 27:  # ESC to search again
+                        self.search_gui.result_title = None
+                        self.search_gui.search_text = ""
+                        self.result_found = False
+                
+                else:
+                    # Search/Input mode
+                    frame = np.zeros((self.search_gui.height, self.search_gui.width, 3), dtype=np.uint8)
+                    frame = self.search_gui.draw_input_screen(frame)
+                    
+                    cv2.imshow("YouTube Search", frame)
+                    
+                    key = cv2.waitKey(100) & 0xFF
+                    
+                    if key == 27:  # ESC to quit
+                        self.running = False
+                    elif key == 13:  # ENTER to search
+                        if self.search_gui.search_text.strip():
+                            self.search_gui.searching = True
+                            self.search_gui.result_title = None
+                            search_text = self.search_gui.search_text
+                            self.search_gui.search_text = ""
+                            
+                            # Search in background thread
+                            thread = threading.Thread(target=self.search_thread, args=(search_text,))
+                            thread.daemon = True
+                            thread.start()
+                    elif key == 8:  # Backspace to delete
+                        if self.search_gui.search_text:
+                            self.search_gui.search_text = self.search_gui.search_text[:-1]
+                    elif key != 255 and 32 <= key <= 126:  # Regular characters
+                        self.search_gui.search_text += chr(key)
             
-            cv2.imshow("YouTube Player", frame)
-            
-            key = cv2.waitKey(500) & 0xFF
-            
-            if key == 27:  # ESC to quit
-                self.running = False
-            elif key == ord('s'):  # S to stop video
-                self.stop_video()
-                print("Video stopped")
+            else:
+                # Player mode
+                frame = np.zeros((self.height, self.width, 3), dtype=np.uint8)
+                frame = self.draw_player_screen(frame)
+                
+                cv2.imshow("YouTube Player", frame)
+                
+                key = cv2.waitKey(500) & 0xFF
+                
+                if key == 27:  # ESC to quit
+                    self.running = False
+                elif key == ord('s'):  # S to search new video
+                    self.stop_video()
+                    self.search_mode = True
+                    self.result_found = False
+                    self.video_title = None
+                    self.video_url = None
+                    cv2.destroyWindow("YouTube Player")
         
         self.stop_video()
         cv2.destroyAllWindows()
         print("YouTube Player closed")
-    
-    def interactive_mode(self):
-        """Interactive mode for searching and playing videos"""
-        print("\n=== YOUTUBE PLAYER ===")
-        print("Commands:")
-        print("  search <query> - Search for a video")
-        print("  play - Play the current video")
-        print("  stop - Stop the current video")
-        print("  quit - Exit the player\n")
-        
-        while True:
-            try:
-                cmd = input("Enter command: ").strip().lower()
-                
-                if cmd.startswith("search "):
-                    query = cmd[7:]
-                    if self.search_youtube(query):
-                        print(f"Found: {self.video_title}")
-                    else:
-                        print("Video not found")
-                
-                elif cmd == "play":
-                    if self.video_url:
-                        self.play_video()
-                    else:
-                        print("No video selected. Search first!")
-                
-                elif cmd == "stop":
-                    self.stop_video()
-                    print("Video stopped")
-                
-                elif cmd == "quit":
-                    self.stop_video()
-                    print("Exiting...")
-                    break
-                
-                else:
-                    print("Unknown command. Type 'search <query>', 'play', 'stop', or 'quit'")
-            
-            except KeyboardInterrupt:
-                self.stop_video()
-                break
-            except Exception as e:
-                print(f"Error: {e}")
+
 
 if __name__ == "__main__":
     player = YouTubePlayer()
-    # Use interactive mode for easier testing
-    player.interactive_mode()
+    player.run()

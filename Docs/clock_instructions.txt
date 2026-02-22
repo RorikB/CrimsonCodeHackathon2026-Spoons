@@ -1,0 +1,22 @@
+CLOCK GUI INSTRUCTIONS
+======================
+
+CONTROLS:
+---------
+T     - Toggle between 12-hour and 24-hour format
+Q     - Quit the application
+
+DISPLAY:
+--------
+The clock shows the current local time and updates in real-time.
+The format indicator (12H or 24H) appears in the top-left corner.
+
+POSITIONING:
+-----------
+Right-click the window title bar to move the clock to the top-right corner
+of your screen, or drag it to your preferred location.
+
+KEYBOARD SHORTCUTS:
+------------------
+T     Toggle time format
+Q     Exit clock application

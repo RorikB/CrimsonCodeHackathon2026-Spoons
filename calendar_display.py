@@ -90,9 +90,9 @@ class GoogleCalendarDisplay:
         cv2.putText(frame, f"Total: {len(today_items)} events", (15, self.height - 20),
                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (150, 150, 150), 1)
         
-        # Instructions
-        cv2.putText(frame, "Press Q to quit", (15, self.height - 3),
-                   cv2.FONT_HERSHEY_SIMPLEX, 0.4, (100, 100, 100), 1)
+        # # Instructions
+        # cv2.putText(frame, "Press Q to quit", (15, self.height - 3),
+        #            cv2.FONT_HERSHEY_SIMPLEX, 0.4, (100, 100, 100), 1)
         
         return frame
     
@@ -108,7 +108,7 @@ class GoogleCalendarDisplay:
         
         print("📺 Calendar display running...")
         print("   Drag the window to position it (top-right recommended)")
-        print("   Press 'Q' to quit\n")
+        print("   Press 'ESC' to quit\n")
         
         while self.running:
             # Create frame
@@ -123,7 +123,7 @@ class GoogleCalendarDisplay:
             # Handle key press (update every 1 second)
             key = cv2.waitKey(1000) & 0xFF
             
-            if key == ord('q'):
+            if key == 27: # ESC key to quit:
                 self.running = False
         
         cv2.destroyAllWindows()

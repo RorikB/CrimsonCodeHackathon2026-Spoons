@@ -21,10 +21,10 @@ def run_whisper():
 if __name__ == "__main__":
     # lamma.chat("Hello, how are you?")
 
-    vision_thread = threading.Thread(target=run_vision, daemon=True)
+    # vision_thread = threading.Thread(target=run_vision, daemon=True)
     whisper_thread = threading.Thread(target=run_whisper, daemon=True)
 
-    vision_thread.start()
+    # vision_thread.start()
     whisper_thread.start()
 
 

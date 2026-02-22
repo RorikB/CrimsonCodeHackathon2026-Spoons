@@ -19,7 +19,8 @@ elevenlabs = ElevenLabs(
 def prompt_elevenlabs(input_text):
     audio = elevenlabs.text_to_speech.convert(
         text=input_text,
-        voice_id="JBFqnCBsd6RMkjVDRZzb",
+        # voice_id="JBFqnCBsd6RMkjVDRZzb"
+        voice_id="dtSEyYGNJqjrtBArPCVZ",
         model_id="eleven_multilingual_v2",
         output_format="mp3_44100_128",
     )

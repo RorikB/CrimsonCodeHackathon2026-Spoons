@@ -7,6 +7,8 @@ from datetime import datetime
 from backenedWeather.weather import get_weather_data
 from backenedWeather.google_calendar_api import GoogleCalendarAPI
 
+from spotify_widget import SpotifyWidget
+
 
 # --- Placeholder Values ---
 PLACEHOLDER_TIME = "12:00 PM"
@@ -120,6 +122,10 @@ class SmartMirror(tk.Tk):
             justify="left"
         )
         self.calendar_label.pack(anchor="w", pady=4)
+
+        # ── Spotify Widget ───────────────────────────────────────  
+        self.spotify_widget = SpotifyWidget(self, width=300, height=260, enable_voice=True)
+        self.spotify_widget.frame.place(relx=1.0, rely=1.0, anchor="se", x=0, y=80)
 
     # ── Clock ─────────────────────────────────────────────────────
     def update_clock(self):

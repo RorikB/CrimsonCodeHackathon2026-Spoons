@@ -11,7 +11,7 @@ def get_recorder():
     global recorder
     if recorder is None:
         recorder = AudioToTextRecorder(
-            wake_words="blueberry",
+            wake_words="computer",
             wakeword_backend="pvporcupine",
             on_wakeword_detected=on_wakeword_detected,
             wake_words_sensitivity=0.7,
@@ -40,6 +40,11 @@ def speech_to_text():
 
 
     # print("\nTime Taken: "+ str(time.process_time() - start))
+def talk(input_text):
+    
+    output = lamma.chat(input_text)
+    if not stringParser.check_for_command(output):
+        elevenLabs.prompt_elevenlabs(output)
 
 
 if __name__ == '__main__': # needed for multiprecessing

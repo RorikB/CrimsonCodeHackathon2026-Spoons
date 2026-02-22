@@ -35,14 +35,14 @@ def fullscreen_mirror(state, focus=None):
             break
 
         elif key == ord('w'):
-            focus == "Weather"
+            focus = "Weather"
         elif key == ord('t'):
-            focus == "Time"
+            focus = "Time"
         elif key == ord('c'):
-            focus == "Calendar"
+            focus = "Calendar"
         elif key == ord('m'):
-            focus == "Music"
+            focus = "Music"
         elif key == ord('y'):
-            focus == None
+            focus = None
         
     cv2.destroyAllWindows()

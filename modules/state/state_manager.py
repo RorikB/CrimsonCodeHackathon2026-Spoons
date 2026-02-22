@@ -1,5 +1,6 @@
 from clock import get_current_time
 from calendar import get_next_event
+from timer import get_countdown
 
 def __init__(self):
     self.state = {
@@ -13,6 +14,8 @@ def get_state(self, key):
         return get_current_time()
     elif key == "Calendar":
         return get_next_event()
+    elif key == "Timer":
+        return get_countdown
     else:
         return self.state.get(key, f"{key} Placeholder")
 

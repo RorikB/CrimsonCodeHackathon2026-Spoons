@@ -2,6 +2,7 @@
 import tkinter as tk
 from datetime import datetime
 from timer import Timer
+from timerInstance import global_timer
 
 # from fastapi import requests
 
@@ -51,8 +52,8 @@ class SmartMirror(tk.Tk):
         self.calendar = GoogleCalendarAPI()
         self.calendar_ready = self.calendar.authenticate()
 
-        self.timer = Timer()
-        self.timer.start(100)
+        self.timer = global_timer
+        # self.timer.start(100)
 
         self.build_ui()
         self.update_clock()
@@ -263,4 +264,5 @@ if __name__ == "__main__":
    # vision_thread.start()
     whisper_thread.start()
     app = SmartMirror()
+    global_timer = app.timer
     app.mainloop()

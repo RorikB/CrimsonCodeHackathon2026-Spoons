@@ -5,7 +5,8 @@ import lamma
 from timer import Timer
 # import google_calendar_api
 import spotify_player
-
+from display import global_timer
+from timerInstance import global_timer
 def hello(name):
     print(f"Hello, {name}!")
     return f"greeted {name}"
@@ -15,13 +16,13 @@ def add(a, b):
     print(f"{a} + {b} = {result}")
     elevenLabs.prompt_elevenlabs(f"The result of adding {a} and {b} is {result}")
     return result
-timer = Timer()
+timer = global_timer
 
 FUNCTION_MAP = {
     "hello": hello,
     "add": add,
     "clock": lambda: elevenLabs.prompt_elevenlabs(f"The time is {clock_gui.ClockGUI().get_time_string()}"),
-    "timer": lambda *args: timer.start(*args),
+    "timer": lambda *args: global_timer.start(*args),
     # "calendar": lambda: elevenLabs.prompt_elevenlabs(google_calendar_api.GoogleCalendarAPI().run()),
     # "calendar": lambda: elevenLabs.prompt_elevenlabs(llama.chat("What is on my calendar today?")),
     "pause": lambda: spotify_player.SpotifyPlayer().play_pause(),

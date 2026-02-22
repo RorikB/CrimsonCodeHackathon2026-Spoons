@@ -1,9 +1,11 @@
+
 import tkinter as tk
 from datetime import datetime
 
 # from fastapi import requests
-from backenedWeather import weather
+
 from backenedWeather.weather import get_weather_data
+from backenedWeather.google_calendar_api import GoogleCalendarAPI
 
 from spotify_widget import SpotifyWidget
 
@@ -17,11 +19,7 @@ PLACEHOLDER_WEATHER_ICON = "⛅"
 PLACEHOLDER_HUMIDITY = "Humidity: 55%"
 PLACEHOLDER_WIND = "Wind: 8 mph"
 PLACEHOLDER_NAME = "Welcome, User"
-PLACEHOLDER_NEWS = [
-    "📰 Headline 1: Placeholder news story here",
-    "📰 Headline 2: Another placeholder news story",
-    "📰 Headline 3: Yet another placeholder story",
-]
+PLACEHOLDER_CALENDAR = "No events today"
 
 class SmartMirror(tk.Tk):
     def __init__(self):
@@ -35,9 +33,13 @@ class SmartMirror(tk.Tk):
         self._fade_direction = 1        # 1 = fade in, -1 = fade out
         self._fade_paused = False
 
+        self.calendar = GoogleCalendarAPI()
+        self.calendar_ready = self.calendar.authenticate()
+
         self.build_ui()
         self.update_clock()
         self.update_weather()
+        self.update_calendar()
         self.after(300, self.fade_greeting)
 
     def build_ui(self):
@@ -106,15 +108,20 @@ class SmartMirror(tk.Tk):
         news_frame = tk.Frame(self, bg="black")
         news_frame.pack(fill="x", padx=40, pady=30, side="bottom")
 
-        tk.Label(news_frame, text="TOP STORIES",
-                 font=("Helvetica Neue", 14, "bold"),
-                 fg="#555555", bg="black").pack(anchor="w")
+        tk.Label(news_frame, text="Calendar",
+            font=("Helvetica Neue", 14, "bold"),
+            fg="#555555", bg="black").pack(anchor="w")
 
-        for headline in PLACEHOLDER_NEWS:
-            tk.Label(news_frame, text=headline,
-                     font=("Helvetica Neue", 16),
-                     fg="#AAAAAA", bg="black",
-                     wraplength=900, justify="left").pack(anchor="w", pady=4)
+        self.calendar_label = tk.Label(
+            news_frame,
+            text="Loading events...",
+            font=("Helvetica Neue", 16),
+            fg="#AAAAAA",
+            bg="black",
+            wraplength=900,
+            justify="left"
+        )
+        self.calendar_label.pack(anchor="w", pady=4)
 
         # ── Spotify Widget ───────────────────────────────────────  
         self.spotify_widget = SpotifyWidget(self, width=300, height=260, enable_voice=True)
@@ -142,6 +149,35 @@ class SmartMirror(tk.Tk):
 
         # Schedule next update in 10 minutes (600000 ms)
         self.after(600000, self.update_weather)
+
+    def update_calendar(self):
+        if not self.calendar_ready:
+            self.calendar_label.config(text="Calendar unavailable")
+            return
+
+        events = self.calendar.get_todays_events()
+
+        if not events:
+            display_text = "No events today"
+        else:
+            lines = []
+            for event in events:
+                start = event['start']
+
+                # Convert Google time → readable time
+                if "T" in start:
+                    dt = datetime.fromisoformat(start.replace("Z", "+00:00"))
+                    time_str = dt.strftime("%I:%M %p")
+                else:
+                    time_str = "All Day"
+
+                title = event['title']
+                lines.append(f"{time_str} – {title}")
+
+            display_text = "\n".join(lines)
+
+        self.calendar_label.config(text=display_text)
+        self.after(600000, self.update_calendar)
 
     # ── Smooth fade in / pause / fade out ────────────────────
     def fade_greeting(self):

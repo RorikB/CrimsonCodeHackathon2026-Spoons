@@ -38,6 +38,8 @@ class SpotifyPlayer:
             open_browser=True,
             cache_path=".spotify_cache"  # Save token to remember login
         ))
+
+        
         
         self.current_track = None
         self.album_cover = None

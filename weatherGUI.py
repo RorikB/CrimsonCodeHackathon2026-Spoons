@@ -7,12 +7,15 @@ from pathlib import Path
 import sys
 
 
-# Get absolute backend path safely
+# Absolute path to current file
 BASE_DIR = Path(__file__).resolve().parent
-BACKEND_DIR = BASE_DIR.parent / "backenedWeather"
+
+# backend folder is inside the project folder
+BACKEND_DIR = BASE_DIR / "backenedWeather"
 
 print("Starting backend from:", BACKEND_DIR)
 
+# Start backend process
 backend_process = subprocess.Popen(
     [sys.executable, "-m", "uvicorn", "main:app", "--port", "8001"],
     cwd=str(BACKEND_DIR)
@@ -68,3 +71,5 @@ update_weather()
 root.protocol("WM_DELETE_WINDOW", on_close)
 
 root.mainloop()
+
+# get_weather()

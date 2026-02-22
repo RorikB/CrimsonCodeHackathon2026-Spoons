@@ -1,0 +1,62 @@
+CALENDAR ENGINE USAGE GUIDE
+===========================
+
+OVERVIEW:
+---------
+CalendarEngine reads .ics calendar files and extracts upcoming events.
+These files can be exported from Google Calendar, Outlook, Apple Calendar, etc.
+
+GETTING A CALENDAR FILE:
+------------------------
+Google Calendar:
+1. Open Google Calendar in browser
+2. Go to Settings > Import & Export
+3. Click "Export" to download all your calendars as .ics files
+
+Outlook:
+1. Open Outlook Calendar
+2. File > Save Calendar > Save as .ics file
+
+Apple Calendar:
+1. Open Calendar app
+2. File > Export > Export calendar
+
+BASIC USAGE:
+-----------
+from calendar_engine import CalendarEngine
+
+# Create engine with path to your .ics file
+cal = CalendarEngine("my_calendar.ics")
+
+# Get all upcoming events
+events = cal.get_upcoming_events()
+
+# Print events
+for event in events:
+    print(f"{event['title']} at {event['start']}")
+
+EXAMPLE OUTPUT:
+--------------
+Team Meeting at 2026-02-22 14:00:00+00:00
+Doctor Appointment at 2026-02-23 10:30:00+00:00
+Birthday Party at 2026-02-25 18:00:00+00:00
+
+EVENT DATA STRUCTURE:
+--------------------
+Each event is a dictionary with:
+    - 'title': Event name (string)
+    - 'start': Event start time (datetime object)
+
+INTEGRATION IDEAS:
+-----------------
+- Display today's events on smart mirror
+- Voice assistant reads upcoming schedule
+- Set automatic reminders
+- Show calendar in your GUI alongside the clock
+- Filter events by time (next hour, next day, next week)
+
+NOTES:
+------
+- Only returns FUTURE events (events after current time)
+- Events are sorted by start time (earliest first)
+- All times are timezone-aware (UTC)

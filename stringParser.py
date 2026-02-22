@@ -1,6 +1,8 @@
 import re
 import elevenLabs
 import clock_gui
+import timer
+import google_calendar_api
 
 def hello(name):
     print(f"Hello, {name}!")
@@ -15,7 +17,10 @@ def add(a, b):
 FUNCTION_MAP = {
     "hello": hello,
     "add": add,
-    "clock": lambda:clock_gui.ClockGUI().run(),
+    "clock": lambda:clock_gui.ClockGUI().get_time_string(),
+    # "timer": lambda duration: timer_gui.TimerGUI().run(int(duration)) if duration else print("Timer command requires a duration argument"),
+    "timer": lambda duration: timer.get_status_string() if duration is None else timer.start(int(duration)),
+    "calendar": lambda: google_calendar_api.GoogleCalendarAPI().run(),
 }
 
 def check_for_command(input_string):
@@ -42,8 +47,6 @@ def check_for_command(input_string):
 def call(input):
     check_for_command(input)
 
-# call(">clock()")
-
-
-
-
+call(">clock()")
+# call(">timer(10)")
+call(">calendar()")

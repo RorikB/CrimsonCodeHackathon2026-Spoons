@@ -179,10 +179,10 @@ class TimerGUI:
             cv2.putText(frame, duration_text, (20, self.height - 60), 
                        cv2.FONT_HERSHEY_SIMPLEX, 0.6, (150, 150, 150), 1)
         
-        # Draw instructions
-        instructions = "Press 'Q' to quit"
-        cv2.putText(frame, instructions, (20, self.height - 20), 
-                   cv2.FONT_HERSHEY_SIMPLEX, 0.5, (100, 100, 100), 1)
+        # # Draw instructions
+        # instructions = "Press 'Q' to quit"
+        # cv2.putText(frame, instructions, (20, self.height - 20), 
+        #            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (100, 100, 100), 1)
         
         return frame
     

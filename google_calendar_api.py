@@ -147,59 +147,64 @@ class GoogleCalendarAPI:
             'events': events,
             'has_busy_day': len(events) >= 3
         }
+    
+    def run(self):
+        """Run a demonstration of the calendar API capabilities"""
+        print("\n" + "="*60)
+        print("  GOOGLE CALENDAR API - SMART MIRROR INTEGRATION")
+        print("="*60 + "\n")
+        
+        # Authenticate (opens browser on first run)
+        if not self.authenticate():
+            print("\n❌ Authentication failed. Check GOOGLE_CALENDAR_API_SETUP.txt")
+            return False
+        
+        print("\n✓ Connected to Google Calendar!\n")
+        
+        # Get today's summary
+        print("="*60)
+        print("  ☀️  WHAT'S MY DAY LIKE?")
+        print("="*60 + "\n")
+        
+        day = self.whats_my_day_like()
+        
+        print(f"📅 Today: {datetime.now().strftime('%A, %B %d, %Y')}")
+        print(f"Total events: {day['total']}\n")
+        
+        if day['has_busy_day']:
+            print("⚠️  Looks like a busy day!\n")
+        
+        if day['events']:
+            print("TODAY'S SCHEDULE:")
+            print("-" * 60)
+            for event in day['events']:
+                all_day_label = " (All Day)" if event['all_day'] else ""
+                print(f"\n📅 {event['title']}{all_day_label}")
+                print(f"   ⏰ {event['start']}")
+                if event['location']:
+                    print(f"   📍 {event['location']}")
+        else:
+            print("✨ No events today! Free day!")
+        
+        print("\n" + "="*60)
+        print("  UPCOMING EVENTS (Next 10)")
+        print("="*60 + "\n")
+        
+        upcoming = self.get_upcoming_events(max_results=10)
+        
+        if upcoming:
+            for event in upcoming:
+                print(f"• {event['title']}")
+                print(f"  {event['start']}\n")
+        else:
+            print("No upcoming events found.")
+        
+        print("\n" + "="*60)
+        
+        return True
 
 
 # Example usage
 if __name__ == "__main__":
-    print("\n" + "="*60)
-    print("  GOOGLE CALENDAR API - SMART MIRROR INTEGRATION")
-    print("="*60 + "\n")
-    
     cal = GoogleCalendarAPI()
-    
-    # Authenticate (opens browser on first run)
-    if not cal.authenticate():
-        print("\n❌ Authentication failed. Check GOOGLE_CALENDAR_API_SETUP.txt")
-        exit(1)
-    
-    print("\n✓ Connected to Google Calendar!\n")
-    
-    # Get today's summary
-    print("="*60)
-    print("  ☀️  WHAT'S MY DAY LIKE?")
-    print("="*60 + "\n")
-    
-    day = cal.whats_my_day_like()
-    
-    print(f"📅 Today: {datetime.now().strftime('%A, %B %d, %Y')}")
-    print(f"Total events: {day['total']}\n")
-    
-    if day['has_busy_day']:
-        print("⚠️  Looks like a busy day!\n")
-    
-    if day['events']:
-        print("TODAY'S SCHEDULE:")
-        print("-" * 60)
-        for event in day['events']:
-            all_day_label = " (All Day)" if event['all_day'] else ""
-            print(f"\n📅 {event['title']}{all_day_label}")
-            print(f"   ⏰ {event['start']}")
-            if event['location']:
-                print(f"   📍 {event['location']}")
-    else:
-        print("✨ No events today! Free day!")
-    
-    print("\n" + "="*60)
-    print("  UPCOMING EVENTS (Next 10)")
-    print("="*60 + "\n")
-    
-    upcoming = cal.get_upcoming_events(max_results=10)
-    
-    if upcoming:
-        for event in upcoming:
-            print(f"• {event['title']}")
-            print(f"  {event['start']}\n")
-    else:
-        print("No upcoming events found.")
-    
-    print("\n" + "="*60)
+    cal.run()

@@ -34,3 +34,15 @@ class Timer:
 
     def get_duration(self):
         return self.duration
+    
+    def get_status_string(self):
+        """Get current timer status as a formatted string"""
+        if not self.is_active():
+            return "Timer inactive"
+        
+        remaining = self.get_remaining_time()
+        minutes = remaining // 60
+        seconds = remaining % 60
+        return f"{minutes:02d}:{seconds:02d}"
+    
+    

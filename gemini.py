@@ -5,9 +5,11 @@ from dotenv import load_dotenv
 
 # Load the environment variables from the .env file
 load_dotenv()
+
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 print("Client initialized successfully.")
-
+with open('systemprompt.txt', 'r', encoding='utf-8') as f:
+    system_prompt = f.read()
 
 def prompt_gemini(input_text):
     response = client.models.generate_content(
@@ -15,8 +17,7 @@ def prompt_gemini(input_text):
         # model="gemma-3-1B",
         contents=input_text,
         config={
-            "system_instruction": "you are a smart mirror that keeps answers concise and accurate" +
-            "can call funtion -turnOnLight() in this format, we calling functions only say -turnOnLight() and nothing else"
+            "system_instruction": system_prompt
         }
     )
     print(response.text)

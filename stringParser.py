@@ -1,5 +1,6 @@
 import re
 import elevenLabs
+import clock_gui
 
 def hello(name):
     print(f"Hello, {name}!")
@@ -14,6 +15,7 @@ def add(a, b):
 FUNCTION_MAP = {
     "hello": hello,
     "add": add,
+    "clock": lambda:clock_gui.ClockGUI().run(),
 }
 
 def check_for_command(input_string):
@@ -37,7 +39,10 @@ def check_for_command(input_string):
 
 
 
+def call(input):
+    check_for_command(input)
 
+# call(">clock()")
 
 
 

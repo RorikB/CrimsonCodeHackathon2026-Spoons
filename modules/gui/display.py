@@ -18,6 +18,7 @@ def fullscreen_mirror(state):
         cv2.imshow(window_name, frame)
 
         # press q to quit
-        if cv2.waitKey(1) & 0xFF == ord('q'):
+        key = cv2.waitKey(1) & 0xFF
+        if key == ord('q') or key == 27:
             break
     cv2.destroyAllWindows()

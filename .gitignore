@@ -136,6 +136,9 @@ venv.bak/
 credentials.json
 token.json
 
+# Spotify API token cache (KEEP PRIVATE!)
+.spotify_cache
+
 # Calendar files (private data)
 *.ics
 calendar_cache/

@@ -1,0 +1,47 @@
+YOUTUBE PLAYER SETUP GUIDE
+==========================
+
+REQUIREMENTS:
+1. VLC Media Player (for playing videos)
+2. yt-dlp (already installed with pip)
+3. FFmpeg (optional, but recommended for better compatibility)
+
+INSTALLATION:
+
+1. INSTALL VLC MEDIA PLAYER:
+   - Download from: https://www.videolan.org/vlc/
+   - Install it (default installation is fine)
+   - VLC will be added to your PATH automatically
+
+2. (OPTIONAL) INSTALL FFMPEG:
+   - Download from: https://ffmpeg.org/download.html
+   - Or use: choco install ffmpeg (if you have Chocolatey)
+   - Or use: winget install ffmpeg
+
+USAGE:
+
+Run the YouTube player:
+   python youtube_player.py
+
+Interactive commands:
+   search <query>     - Search for a video (e.g., "search Never Gonna Give You Up")
+   play               - Play the currently selected video
+   stop               - Stop the current video
+   quit               - Exit the player
+
+EXAMPLES:
+   search Never Gonna Give You Up
+   play
+   stop
+   quit
+
+FEATURES:
+- Search YouTube videos by query or URL
+- Displays video title
+- Opens video in VLC player for full playback with controls
+- Can stop/pause/resume through VLC
+
+TROUBLESHOOTING:
+- If VLC doesn't open, make sure it's installed and in your PATH
+- If videos won't download, check your internet connection
+- Some videos may be blocked due to regional restrictions

@@ -1,0 +1,57 @@
+SPOTIFY API SETUP GUIDE
+=======================
+
+1. CREATE A SPOTIFY APP:
+   - Go to https://developer.spotify.com/dashboard
+   - Log in with your Spotify account (create one if needed)
+   - Click "Create an App"
+   - Accept the terms and create the app
+   - You'll get: Client ID and Client Secret
+   - In App Settings, set Redirect URI to: https://localhost:8888/callback
+   - IMPORTANT: Make sure this matches the .env file exactly!
+
+2. SET UP YOUR .env FILE:
+   Add these lines to your .env file:
+   
+   SPOTIFY_CLIENT_ID=your_client_id_here
+   SPOTIFY_CLIENT_SECRET=your_client_secret_here
+   SPOTIFY_REDIRECT_URI=https://localhost:8888/callback
+
+3. FIRST RUN:
+   - Run: python spotify_player.py
+   - Spotify will automatically open if not already running
+   - A browser window will open asking for Spotify login
+   - Authorize the app to access your Spotify account
+   - You'll be redirected to the callback URL (a blank page is normal)
+   - The authorization token will be saved to .spotify_cache
+   - Future runs won't require login again!
+
+4. FEATURES & CONTROLS:
+   - Displays current playing track with album cover art
+   - Shows song title, artist, and album name
+   - Full playback control:
+     * SPACE - Play/Pause
+     * N - Next track
+     * P - Previous track
+     * ESC - Exit player
+   - Auto-opens Spotify if not running
+
+5. HOW IT WORKS:
+   - Player connects to your Spotify account and controls playback
+   - Music plays through Spotify (desktop app or web player)
+   - Works like a car stereo - seamless music control
+   - No need to touch Spotify directly, control everything from the mirror
+
+NOTES:
+- Spotify will automatically open if it's not already running
+- Login credentials are saved to .spotify_cache (you only login once!)
+- The player can both display AND control your music playback
+- Works with Spotify Free and Premium accounts
+- Perfect for smart mirror or hands-free music control
+
+TROUBLESHOOTING:
+- If controls don't work: Make sure music is playing on Spotify first
+  (Play any song manually, then the controls will work from the player)
+- If "No active device" error: Open Spotify and start playing any song
+- The player needs an active Spotify device to control playback
+- Once music is playing, all controls (SPACE/N/P) will work perfectly

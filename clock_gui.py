@@ -60,9 +60,9 @@ class ClockGUI:
             # Handle key presses (1ms timeout)
             key = cv2.waitKey(1) & 0xFF
             
-            if key == ord('q'):  # Quit
+            if key == 27:  # Quit
                 self.running = False
-            elif key == ord('t'):  # Toggle format
+            elif key == 9:  # Toggle format with TAB key
                 self.is_24_hour = not self.is_24_hour
                 print(f"Switched to {'24-hour' if self.is_24_hour else '12-hour'} format")
         

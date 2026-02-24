@@ -1,7 +1,7 @@
 import threading
-import lamma
-import vision
-import whisper
+import lamma as lamma
+import voice.vision as vision
+import voice.whisper as whisper
 import time
 
 

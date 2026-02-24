@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 import time
-from timer import Timer
+from features.timer.timer import Timer
 
 class TimerInputGUI:
     def __init__(self, width=500, height=450):

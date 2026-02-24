@@ -1,10 +1,10 @@
 import re
-import elevenLabs
-import clock_gui
-import lamma
-from timer import Timer
+import voice.elevenLabs as elevenLabs
+import features.clock.clock_gui as clock_gui
+import lamma as lamma
+from features.timer.timer import Timer
 # import google_calendar_api
-import spotify_player
+import features.spotify.spotify_player as spotify_player
 
 def hello(name):
     print(f"Hello, {name}!")

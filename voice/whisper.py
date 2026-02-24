@@ -1,9 +1,9 @@
 from RealtimeSTT import AudioToTextRecorder
-import elevenLabs
-import gemini
+import voice.elevenLabs as elevenLabs
+import voice.gemini as gemini
 import time
-import lamma
-import stringParser
+import lamma as lamma
+import utils.stringParser as stringParser
 import pygame
 latest_text = ""
 recorder = None 

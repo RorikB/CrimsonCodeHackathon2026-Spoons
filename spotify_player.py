@@ -43,8 +43,9 @@ class SpotifyPlayer:
         self.album_cover = None
         self.update_thread = None
         
-        # Check and open Spotify if needed
-        self.ensure_spotify_running()
+        # Note: Spotify app not required for API access, but needed for playback control
+        # Uncomment below if you want auto-launch behavior:
+        # self.ensure_spotify_running()
     
     def is_spotify_running(self):
         """Check if Spotify is currently running"""
